@@ -1,0 +1,27 @@
+	if( $payment_method =='CREDIT' ){
+	
+	$search_custormer = new run_query("select * from   customer  where  customer_phone='$cus_phone' "); 
+		 
+if( $search_custormer->num_rows >= 1){
+
+ $search_custormer_data =	$search_custormer->result();
+	extract($search_custormer_data );
+	$new_custormer_amt_owing = $custormer_amt_owing + $total;
+	
+	$update_debt_custormer = new run_query("update   customer  set custormer_amt_owing='$new_custormer_amt_owing' where  customer_phone='$cus_phone' "); 
+	
+	
+	$add_transaction = new run_query("insert into    transactions  set tran_custormer_name='$cus_name', tran_custormer_phone='$cus_phone', tran_product='$product_name', tran_selling_price='$selling_pricee', tran_cost_price='$cost_price', tran_num_items='$num_items', tran_profit='$profit', tran_total='$total', tran_payment_method='$payment_method', receipt='$receipt', tran_date='$reg_Date' "); 
+	$add_stock = new run_query("update    product  set product_no_stock='$new_stock' where  product_id='$prod_id' "); 
+	
+	echo "<script>
+			 
+			 window.location.replace(\"add_transaction.php?cus_phone=$cus_phone&cus_name=$cus_name\");</script>";
+			 
+	
+	}else{
+	 echo "<script>alert('Error No Customer with Such details. Try registering the customer !!!');
+			 
+			 window.location.replace(\"add_transaction.php?cus_phone=$cus_phone&cus_name=$cus_name&reciept=$receipt\");</script>";
+	}//credit ends
+	} else{
